@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %}Upload Image - {{ super() }}{%
+endblock %} {% block content %}
+<p>Welcome! Upload an image to extract its color palette.</p>
+<form
+  action="{{ url_for('palette.upload_image') }}"
+  method="post"
+  enctype="multipart/form-data"
+  class="upload-form"
+>
+  <div class="form-group">
+    <label for="image-upload">Choose an image:</label>
+    <input
+      type="file"
+      id="image-upload"
+      name="image"
+      accept="image/png, image/jpeg, image/gif"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Extract Palette</button>
+</form>
+{% endblock %}

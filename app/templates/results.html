@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block title %}Palette Results - {{ super() }}{%
+endblock %} {% block content %}
+<h2>Extracted Color Palette</h2>
+
+{% if image_url %}
+<img src="{{ image_url }}" alt="Uploaded Image" class="uploaded-image" />
+{% endif %} {% if palette %}
+<h3>Top Colors:</h3>
+<div class="color-palette">
+  {% for color_data in palette %}
+  <div
+    class="color-box"
+    style="background-color: {{ color_data.hex }};"
+    title="Click to copy {{ color_data.hex }}"
+    onclick="copyToClipboard('{{ color_data.hex }}')"
+  >
+    {{ color_data.hex }}
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Tabs Navigation -->
+<div class="tabs">
+  <button class="tab-link active" onclick="openTab(event, 'hex-codes')">
+    HEX Codes
+  </button>
+  <button class="tab-link" onclick="openTab(event, 'rgb-codes')">
+    RGB Codes
+  </button>
+</div>
+
+<!-- Tab Content for HEX -->
+<div id="hex-codes" class="tab-content" style="display: block">
+  <h4>Color Codes (HEX):</h4>
+  <ul class="color-list">
+    {% for color_data in palette %}
+    <li>{{ color_data.hex }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Tab Content for RGB -->
+<div id="rgb-codes" class="tab-content">
+  <h4>Color Codes (RGB):</h4>
+  <ul class="color-list">
+    {% for color_data in palette %}
+    <li>
+      rgb({{ color_data.rgb[0] }}, {{ color_data.rgb[1] }}, {{ color_data.rgb[2]
+      }})
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% else %}
+<p>Could not extract a palette. Please try another image.</p>
+{% endif %}
+
+<div style="text-align: center; margin-top: 30px">
+  <a href="{{ url_for('palette.index') }}" class="btn btn-primary"
+    >Upload Another Image</a
+  >
+</div>
+{% endblock %} {% block scripts %} {{ super() }} {# Preserve any scripts from
+base.html if needed #}
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(
+      function () {
+        alert("Color " + text + " copied to clipboard!");
+      },
+      function (err) {
+        alert("Could not copy text: " + err);
+      }
+    );
+  }
+
+  function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    // Get all elements with class="tab-content" and hide them
+    tabcontent = document.getElementsByClassName("tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tab-link" and remove the class "active"
+    tablinks = document.getElementsByClassName("tab-link");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+</script>
+{% endblock %}

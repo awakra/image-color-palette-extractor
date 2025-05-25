@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Image Color Palette Extractor{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <h1>
+        {% block header_title %}
+        <a href="{{ url_for('palette.index') }}" class="header-link"
+          >Image Color Palette Extractor</a
+        >
+        {% endblock %}
+      </h1>
+    </header>
+
+    <main>
+      <!-- Flash messages will be displayed here -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category if category else 'info' }}">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <!-- The main content block will be filled by child templates -->
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+      <p>&copy; {{ year }} - Image Color Palette Extractor</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
